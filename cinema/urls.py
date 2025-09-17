@@ -18,7 +18,7 @@ router.register(
     CinemaHallViewSet
 )
 router.register(
-    "movie",
+    "movies",
     MovieViewSet
 )
 router.register(
