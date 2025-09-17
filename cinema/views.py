@@ -18,6 +18,7 @@ from cinema.models import (
     MovieSession
 )
 
+
 class GenreViewSet(ModelViewSet):
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
@@ -41,7 +42,7 @@ class MovieViewSet(ModelViewSet):
         if self.action == "list":
             return MovieListSerializer
         elif self.action == "retrieve":
-            return  MovieRetrieveSerializer
+            return MovieRetrieveSerializer
         return self.serializer_class
 
     def get_queryset(self):
@@ -50,15 +51,13 @@ class MovieViewSet(ModelViewSet):
         return self.queryset
 
 
-
-
 class MovieSessionViewSet(ModelViewSet):
     queryset = MovieSession.objects.all()
     serializer_class = MovieSessionSerializer
 
     def get_serializer_class(self):
         if self.action in ("list", "retrieve"):
-            return  MovieSessionRetrieveListSerializer
+            return MovieSessionRetrieveListSerializer
         return self.serializer_class
 
     def get_queryset(self):
