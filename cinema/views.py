@@ -8,7 +8,8 @@ from cinema.serializers import (
     MovieSessionSerializer,
     MovieSessionRetrieveListSerializer,
     MovieListSerializer,
-    MovieRetrieveSerializer
+    MovieRetrieveSerializer, MovieSessionDetailSerializer,
+    CinemaHallCreateSerializer, MovieCreateSerializer
 )
 from cinema.models import (
     Genre,
@@ -33,6 +34,11 @@ class CinemaHallViewSet(ModelViewSet):
     queryset = CinemaHall.objects.all()
     serializer_class = CinemaHallSerializer
 
+    def get_serializer_class(self):
+        if self.action in ("create", "update"):
+            return CinemaHallCreateSerializer
+        return self.serializer_class
+
 
 class MovieViewSet(ModelViewSet):
     queryset = Movie.objects.all()
@@ -40,14 +46,16 @@ class MovieViewSet(ModelViewSet):
 
     def get_serializer_class(self):
         if self.action == "list":
-            return MovieListSerializer
+            return MovieSerializer
         elif self.action == "retrieve":
-            return MovieRetrieveSerializer
+            return MovieListSerializer
+        elif self.action == "create":
+            return MovieCreateSerializer
         return self.serializer_class
 
     def get_queryset(self):
         if self.action == "list":
-            return Movie.objects.all().select_related()
+            return Movie.objects.prefetch_related("genres", "actors")
         return self.queryset
 
 
@@ -56,11 +64,15 @@ class MovieSessionViewSet(ModelViewSet):
     serializer_class = MovieSessionSerializer
 
     def get_serializer_class(self):
-        if self.action in ("list", "retrieve"):
+        if self.action == "list":
             return MovieSessionRetrieveListSerializer
+        if self.action == "retrieve":
+            return MovieSessionDetailSerializer
         return self.serializer_class
 
     def get_queryset(self):
         if self.action == "list":
-            return MovieSession.objects.all().select_related()
+            return MovieSession.objects.select_related(
+                "movie",
+                "cinema_hall")
         return self.queryset
