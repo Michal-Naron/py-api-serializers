@@ -8,8 +8,10 @@ from cinema.serializers import (
     MovieSessionSerializer,
     MovieSessionRetrieveListSerializer,
     MovieListSerializer,
-    MovieRetrieveSerializer, MovieSessionDetailSerializer,
-    CinemaHallCreateSerializer, MovieCreateSerializer
+    MovieRetrieveSerializer,
+    MovieSessionDetailSerializer,
+    CinemaHallCreateSerializer,
+    MovieCreateSerializer
 )
 from cinema.models import (
     Genre,
